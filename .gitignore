@@ -9,7 +9,6 @@ build/
 .turbo/
 
 # Compact generated files  
-src/managed/
 src/gen/
 gen/
 
@@ -56,7 +55,7 @@ Thumbs.db
 # Temporary
 .tmp/
 temp/
-bank-contract/src/managed/*
+
 bank-api/src/logs/*
 bank-ui/public/keys/*
 bank-ui/public/zkir/*
