@@ -22,6 +22,7 @@
     "_compile-compact": "echo 'Compiling contract...' && compact compile src/bank.compact ./src/managed/bank && touch .compact-cache && echo 'Contract compiled and cached' && npm run compact",
     "typecheck": "tsc --noEmit",
     "build": "npm run compact && rm -rf dist && tsc && cp -Rf ./src/managed ./dist/managed && npm run update-ui-resources",
+    "build:vercel": "tsc && cp -Rf ./src/managed ./dist/managed",
     "update-ui-resources": "npm run update-ui-resources:compiler && npm run update-ui-resources:keys",
     "update-ui-resources:compiler": "mkdir -p ../bank-ui/managed/bank && cp -r src/managed/bank/compiler ../bank-ui/managed/bank/ && cp -r src/managed/bank/contract ../bank-ui/managed/bank/",
     "update-ui-resources:keys": "mkdir -p ../bank-ui/public/keys ../bank-ui/public/zkir && cp src/managed/bank/keys/* ../bank-ui/public/keys/ 2>/dev/null || true && cp src/managed/bank/zkir/* ../bank-ui/public/zkir/ 2>/dev/null || true",

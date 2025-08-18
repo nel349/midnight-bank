@@ -1,6 +1,6 @@
 {
   "installCommand": "cd .. && npm install && cd bank-ui && npm install",
-  "buildCommand": "cd ../bank-api && npm run build && cd ../bank-ui && npm run build:testnet",
+  "buildCommand": "cd ../bank-contract && npm run build:vercel && cd ../bank-api && npm run build:vercel && cd ../bank-ui && npm run build:testnet",
   "outputDirectory": "dist",
   "framework": null,
   "git": {

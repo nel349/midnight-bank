@@ -79,7 +79,6 @@ describe('BankAPI', () => {
 
     beforeAll(async () => {
       // Ensure WebSocket global is set for indexer WS
-      // @ts-expect-error node global augmentation
       globalThis.WebSocket = WebSocket as unknown as typeof globalThis.WebSocket;
       testEnvironment = new TestEnvironment(logger);
       const testConfiguration = await testEnvironment.start();

@@ -6,7 +6,7 @@
   ],
   "pipeline": {
     "typecheck": {
-      "dependsOn": ["^build", "compact"],
+      "dependsOn": ["^build"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig.json"],
       "outputMode": "new-only",
       "outputs": []
@@ -19,7 +19,7 @@
       "outputs": ["src/managed/**", "src/gen/**", "gen/**"]
     },
     "build": {
-      "dependsOn": ["^build", "compact", "typecheck"],
+      "dependsOn": ["^build", "compact"],
       "outputMode": "new-only",
       "inputs": [
         "src/**/*.ts", 
@@ -39,12 +39,12 @@
     },
     "lint": {
       "outputMode": "new-only",
-      "dependsOn": ["compact", "^build", "typecheck"],
+      "dependsOn": ["compact", "^build"],
       "inputs": ["src/**/*.ts", "src/**/*.tsx", ".eslintrc.cjs", "package.json"]
     },
     "test": {
       "outputMode": "new-only",
-      "dependsOn": ["^build", "compact", "typecheck"],
+      "dependsOn": ["^build", "compact"],
       "inputs": [
         "src/**/*.ts", 
         "src/**/*.tsx", 

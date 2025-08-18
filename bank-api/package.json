@@ -18,6 +18,7 @@
     "clean": "rm -rf dist/",
     "typecheck": "tsc --noEmit", 
     "build": "tsc",
+    "build:vercel": "tsc",
     "dev": "tsc --watch",
     "test": "RUN_STANDALONE=true vitest run --passWithNoTests",
     "test:watch": "vitest",
