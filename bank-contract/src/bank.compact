@@ -261,7 +261,7 @@ export circuit grant_disclosure_permission(user_id: Bytes<32>, requester_id: Byt
   active_authorizations.insert(disclose(disclosure_id), disclosure_permission);
   
   // Create shared balance access for disclosure queries
-  const user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(pin)]);
+  const user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), pin]));
   const user_encrypted = encrypted_user_balances.member(disclose(user_id)) ? 
     encrypted_user_balances.lookup(disclose(user_id)) : encrypt_balance(0 as Uint<64>, user_key);
   const user_balance = user_balance_mappings.member(user_encrypted) ? 
@@ -334,7 +334,7 @@ export circuit approve_transfer_authorization(user_id: Bytes<32>, sender_id: Byt
   
   // 5b. Create shared balance access for the sender so recipient can verify funds
   // Encrypt sender's current balance with the shared key for verification
-  const sender_user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(pin)]);
+  const sender_user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), pin]));
   const sender_encrypted = encrypted_user_balances.member(disclose(sender_id)) ? 
     encrypted_user_balances.lookup(disclose(sender_id)) : encrypt_balance(0 as Uint<64>, sender_user_key);
   const sender_balance = user_balance_mappings.member(sender_encrypted) ? 
@@ -390,7 +390,7 @@ export circuit send_to_authorized_user(user_id: Bytes<32>, recipient_id: Bytes<3
   assert (sender_account.owner_hash == public_key(pin), "Authentication failed");
   
   // 3. Update shared balance access with current balance RIGHT BEFORE verification
-  const user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(pin)]);
+  const user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), pin]));
   const sender_encrypted = encrypted_user_balances.lookup(disclose(user_id));
   const sender_balance = user_balance_mappings.lookup(sender_encrypted);
   
@@ -473,7 +473,7 @@ export circuit claim_authorized_transfer(user_id: Bytes<32>, sender_id: Bytes<32
   assert (pending_amount > 0 as Uint<64>, "No pending amount to claim");
   
   // 6. Add tokens to recipient's balance using encrypted system
-  const user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(pin)]);
+  const user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), pin]));
   const current_encrypted = encrypted_user_balances.member(disclose(user_id)) ? 
     encrypted_user_balances.lookup(disclose(user_id)) : encrypt_balance(0 as Uint<64>, user_key);
   const current_balance = user_balance_mappings.member(current_encrypted) ? 
@@ -523,7 +523,7 @@ export circuit get_token_balance(user_id: Bytes<32>, pin: Bytes<32>): [] {
   assert (account.owner_hash == expected_owner, "Authentication failed");
   
   // Get encrypted balance using user's PIN
-  const user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(pin)]);
+  const user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), pin]));
   const encrypted_balance = encrypted_user_balances.member(disclose(user_id)) ? 
     encrypted_user_balances.lookup(disclose(user_id)) : encrypt_balance(0 as Uint<64>, user_key);
   const balance = user_balance_mappings.member(encrypted_balance) ? 
@@ -559,7 +559,7 @@ export circuit verify_account_status(user_id: Bytes<32>, pin: Bytes<32>): [] {
   assert (account.owner_hash == expected_owner, "Authentication failed");
   
   // Verify account properties with encrypted token balance
-  const user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(pin)]);
+  const user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), pin]));
   const encrypted_balance = encrypted_user_balances.member(disclose(user_id)) ? 
     encrypted_user_balances.lookup(disclose(user_id)) : encrypt_balance(0 as Uint<64>, user_key);
   const token_balance = user_balance_mappings.member(encrypted_balance) ? 
@@ -596,7 +596,7 @@ export pure circuit public_key(sk: Bytes<32>): Bytes<32> {
 // Mint new bank tokens for a user (privacy-preserving with sharing capability)
 circuit mint_bank_tokens(user_id: Bytes<32>, amount: Uint<64>, user_pin: Bytes<32>): [] {
   // Create user's personal encryption key from PIN
-  const user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(user_pin)]);
+  const user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), user_pin]));
   
   // Get current encrypted balance
   const current_encrypted = encrypted_user_balances.member(user_id) ? 
@@ -626,7 +626,7 @@ circuit mint_bank_tokens(user_id: Bytes<32>, amount: Uint<64>, user_pin: Bytes<3
 // Burn bank tokens from a user (encrypted balance system)
 circuit burn_bank_tokens(user_id: Bytes<32>, amount: Uint<64>, user_pin: Bytes<32>): [] {
   // Get current encrypted balance
-  const user_key = persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), disclose(user_pin)]);
+  const user_key = disclose(persistentHash<Vector<2, Bytes<32>>>([pad(32, "user:balance:"), user_pin]));
   const current_encrypted = encrypted_user_balances.member(user_id) ? 
     encrypted_user_balances.lookup(user_id) : encrypt_balance(0 as Uint<64>, user_key);
   
